@@ -18,10 +18,8 @@ export const receiveUser: ActionCreator<ReceiveUserAction> = (user: User) => {
 export function login(user: FormUser) {
   return (dispatch: Dispatch) => {
     postSessions(user)
-      // .then(res => res.json())
-      // .then(({ id, username }) => dispatch(receiveUser({id, username})))
-      .then((user: User) => dispatch(receiveUser(user)), () => {
-        dispatch(receiveErrors("wat login"))
+      .then((user: User) => dispatch(receiveUser(user)), err => {
+        dispatch(receiveErrors(err.responseJSON))
       })
   }
 }
