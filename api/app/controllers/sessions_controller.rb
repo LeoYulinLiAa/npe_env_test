@@ -4,21 +4,28 @@ class SessionsController < ApplicationController
     p request.body.read
     @user = User.find_by_credential(params[:user][:username], params[:user][:password])
     if @user
-      new_session = Session.create!(user: @user, token: SecureRandom.urlsafe_base64)
+      token = SecureRandom.urlsafe_base64
+      Session.create!(user: @user, token: token)
+      session[:token] = token
+      cookies[:asdf] = { value: "asdf" }
       render 'users/show'
     else
       render json: ["Invalid username or password"], status: 401
     end
   end
 
-  def show
-    session = Session.includes(:user).find_by_token(params[:token])
-    @user = session.user
-    render 'users/show'
+  def index
+    result = Session.includes(:user).find_by_token(session[:token])
+    if @user
+      @user = result.user
+      render 'users/show'
+    else
+      render json: ["Permission Denied"], status: 401
+    end
   end
 
   def destroy
-    session = Session.find_by_token(params[:token])
+    session = Session.find_by_token(params[:id])
     session&.destroy!
     render status: 204
   end

@@ -4,6 +4,6 @@ Rails.application.routes.draw do
     resources :todos, only: %i[index]
   end
   resources :todos, only: %i[create update show]
-  resources :sessions, only: %i[create destroy]
+  resources :sessions, only: %i[create index destroy]
 
 end

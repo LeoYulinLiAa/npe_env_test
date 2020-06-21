@@ -1,7 +1,7 @@
 import { Action, ActionCreator, Dispatch } from "redux";
 import { postSessions, postUsers } from "../utils/api_utils";
 import { FormUser, User } from "../types/user";
-import { receiveErrors } from "./error_actions";
+import { receiveSessionErrors, sessionErrorReset } from "./error_actions";
 
 export interface ReceiveUserAction extends Action {
   type: "RECEIVE_USER",
@@ -18,8 +18,11 @@ export const receiveUser: ActionCreator<ReceiveUserAction> = (user: User) => {
 export function login(user: FormUser) {
   return (dispatch: Dispatch) => {
     postSessions(user)
-      .then((user: User) => dispatch(receiveUser(user)), err => {
-        dispatch(receiveErrors(err.responseJSON))
+      .then((user: User) => {
+        dispatch(receiveUser(user));
+        dispatch(sessionErrorReset());
+      }, err => {
+        dispatch(receiveSessionErrors(err.responseJSON))
       })
   }
 }
@@ -27,8 +30,11 @@ export function login(user: FormUser) {
 export function signup(user: FormUser) {
   return (dispatch: Dispatch) => {
     postUsers(user)
-      .then((user: User) => dispatch(receiveUser(user)), err => {
-        dispatch(receiveErrors(err.responseJSON))
+      .then((user: User) => {
+        dispatch(receiveUser(user));
+        dispatch(sessionErrorReset());
+      }, err => {
+        dispatch(receiveSessionErrors(err.responseJSON))
       })
   }
 }

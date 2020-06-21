@@ -1,5 +1,8 @@
 class ApplicationController < ActionController::API
 
+  include AbstractController::Helpers
+  include ActionController::Cookies
+
   def current_user
     @current_user ||= User.find_by_token(session[:token])
   end

@@ -10,7 +10,9 @@ export function postUsers(user: FormUser) {
   return ajax({
     url: api_url("/users"),
     method: "POST",
-    data: { user }
+    crossDomain: true,
+    xhrFields: { withCredentials: true },
+    data: { user },
   });
 }
 
@@ -18,6 +20,8 @@ export function postSessions(user: FormUser) {
   return ajax({
     url: api_url("/sessions"),
     method: "POST",
+    crossDomain: true,
+    xhrFields: { withCredentials: true },
     data: { user }
   });
 }

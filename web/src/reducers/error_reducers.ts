@@ -1,10 +1,17 @@
-import { ReceiveErrorsAction } from "../actions/error_actions";
-import { Dispatch } from "redux";
+import { ErrorActions, ReceiveSessionErrorsAction } from "../actions/error_actions";
 
-const errorReducer = (state = [], action: ReceiveErrorsAction) => {
+type ErrorState =  { session: string[] }
+
+const defaultState: ErrorState = {
+  session: []
+};
+
+const errorReducer = (state = defaultState, action: ErrorActions): ErrorState => {
   switch (action.type) {
-    case "RECEIVE_ERRORS":
-      return action.errors;
+    case "SESSION_ERROR_RESET":
+      return defaultState;
+    case "RECEIVE_SESSION_ERRORS":
+      return {...state, session: action.errors };
     default:
       return state;
   }

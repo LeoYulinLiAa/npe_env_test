@@ -1,7 +1,7 @@
 import { ReceiveUserAction } from "../actions/user_actions";
 
 
-export function userReducers(state = {}, action: ReceiveUserAction) {
+function userReducers(state = {}, action: ReceiveUserAction) {
   switch (action.type) {
     case "RECEIVE_USER":
       return { ...state, ...action.user };
@@ -10,3 +10,4 @@ export function userReducers(state = {}, action: ReceiveUserAction) {
   }
 }
 
+export default userReducers
