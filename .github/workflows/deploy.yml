@@ -35,10 +35,8 @@ jobs:
         HEROKU_API_KEY: ${{ secrets.HEROKU }}
         HEROKU_APP_NAME: "npe-env-test"
       run: |
-        heroku container:login
+        heroku login
         heroku git:remote -a npe-env-test
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
         git subtree push --prefix api heroku master
     - name: Migrate DB
       env: 
