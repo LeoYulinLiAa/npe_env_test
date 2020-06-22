@@ -1,0 +1,38 @@
+
+name: Deploy
+
+on: [push]
+
+jobs:
+  github_pages:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'web skip')"
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install and Build
+      run: |
+        cd web
+        npm install
+        npm run build
+    - name: Deploy 🚀
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: web/dist
+  heroku:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'api skip')"
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to Heroku Container registry
+      env: 
+        HEROKU_API_KEY: ${{ secrets.HEROKU }}
+        HEROKU_APP_NAME: "npe-env-test"
+      run: curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+      run: heroku container:login
+      run: heroku git:remote -a npe-env-test
+      run: git subtree push --prefix api heroku master
+      run: heroku run rails db:migrate
