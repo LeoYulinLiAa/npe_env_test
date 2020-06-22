@@ -27,19 +27,26 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Auth
+      env: 
+        email: ${{ secrets.HEROKU_EMAIL }}
+        api_key: ${{ secrets.HEROKU }}
+      run: |
+        tee ~/.netrc << END
+        machine api.heroku.com
+            login $email
+            password $api_key
+        machine git.heroku.com
+            login $email
+            password $api_key
+        END
     - name: Setup Heroku CLI
       run: |
         curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
     - name: Deploy to Heroku
-      env: 
-        HEROKU_API_KEY: ${{ secrets.HEROKU }}
-        HEROKU_APP_NAME: "npe-env-test"
       run: |
-        heroku login
         heroku git:remote -a npe-env-test
         git subtree push --prefix api heroku master
     - name: Migrate DB
-      env: 
-        HEROKU_API_KEY: ${{ secrets.HEROKU }}
       run: |
         heroku run rails db:migrate
