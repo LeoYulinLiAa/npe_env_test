@@ -31,8 +31,9 @@ jobs:
       env: 
         HEROKU_API_KEY: ${{ secrets.HEROKU }}
         HEROKU_APP_NAME: "npe-env-test"
-      run: curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
-      run: heroku container:login
-      run: heroku git:remote -a npe-env-test
-      run: git subtree push --prefix api heroku master
-      run: heroku run rails db:migrate
+      run: |
+        curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+        heroku container:login
+        heroku git:remote -a npe-env-test
+        git subtree push --prefix api heroku master
+        heroku run rails db:migrate
