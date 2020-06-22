@@ -29,7 +29,7 @@ const SessionForm: FC<{ type: "signup" | "login" }> = props => {
     <h2>{ props.type }</h2>
     { errors.session.length > 0 && <div className="alert danger">
       <ul>
-        { errors.session.map((msg, i) => <li key={i}>{msg}</li>)}
+        { errors.session.map((msg, i) => <li key={i}>{msg}</li>) }
       </ul>
     </div> }
     <form onSubmit={handleSubmit}>

@@ -34,6 +34,14 @@ jobs:
       run: |
         curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
         heroku container:login
-        heroku git:remote -a npe-env-test
-        git subtree push --prefix api heroku master
-        heroku run rails db:migrate
+    - name: Deploy to Heroku
+      env: 
+        HEROKU_API_KEY: ${{ secrets.HEROKU }}
+        HEROKU_APP_NAME: "npe-env-test"
+      run: |
+        git subtree push --prefix api https://heroku:$HEROKU_API_TOKEN@git.heroku.com/$HEROKU_APP_NAME.git origin/master:master
+    - name: Migrate DB
+    env: 
+      HEROKU_API_KEY: ${{ secrets.HEROKU }}
+    run: |
+      heroku run rails db:migrate

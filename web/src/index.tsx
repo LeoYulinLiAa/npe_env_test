@@ -3,10 +3,13 @@ import React from "react";
 import ReactDom from "react-dom";
 import Root from "./components/root";
 import { configureStore } from "./store/store";
+import { getSession } from "./utils/local_storage_util";
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  const store = configureStore();
+  const store = configureStore({
+    session: getSession()
+  });
 
   ReactDom.render(<Root store={store}/>, document.getElementById("content"));
 });

@@ -3,7 +3,7 @@ import userReducers from "./user_reducers";
 import errorReducer from "./error_reducers";
 
 const rootReducer = combineReducers({
-  users: userReducers,
+  session: userReducers,
   errors: errorReducer
 });
 
